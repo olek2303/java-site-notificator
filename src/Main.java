@@ -6,15 +6,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.*;
 import java.net.*;
-import java.time.Duration;
 import java.util.*;
 
 public class Main {
     static Map<String, String> checkSumDB = new HashMap<String, String>();
-
     public static void main(String []args) throws IOException, InterruptedException {
         while (true) {
-            String url = "https://www.otomoto.pl/osobowe/seg-cabrio--seg-city-car--seg-compact--seg-coupe--seg-sedan/od-2012?search%5Bfilter_float_mileage%3Ato%5D=150000&search%5Bfilter_float_engine_power%3Afrom%5D=100&search%5Bfilter_float_price%3Ato%5D=40000&search%5Bfilter_enum_damaged%5D=0&search%5Border%5D=created_at_first%3Adesc&search%5Badvanced_search_expanded%5D=true";
+            String url = "https://wiadomosci.onet.pl/";
             // query last checksum from map
             String lastChecksum = checkSumDB.get(url);
             // get current checksum using static utility method
@@ -45,15 +43,23 @@ public class Main {
         String text = "";
         try {
             driver.get(spec);
-            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(10000));
-            WebElement textBoxe = driver.findElement(By.className("ooa-7wotau")); // name of the action box on otomoto
-            textBoxe = driver.findElement(By.className("ooa-9tzypk"));
-            textBoxe = driver.findElement(By.className("e1p19lg720"));
+            //driver.manage().timeouts().implicitlyWait(Duration.ofMillis(10000));
+            WebElement textBoxe = driver.findElement(By.className("mediumNewsBox")); // name of the action box on otomoto
             text = textBoxe.getText();
             System.out.println("To jest tekst poszukiwanego elementu : " + text);
-        } finally {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
             driver.quit();
         }
         return text;
+    }
+
+    public static void allElementsOfPage(String spec) {
+        WebDriver driver = new ChromeDriver();
+        driver.get(spec);
+        List<WebElement> elements = driver.findElements(By.xpath("//*"));
+        System.out.println(Integer.toString(elements.size()));
     }
 }
